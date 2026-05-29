@@ -83,11 +83,38 @@ IM8: Confirming GPO Rules Applied to Domain
 
 ### Part 4: Configuring Account Lockout Policy
 
-Another Policy I wanted to configure within the "Password Policies" GPO was Account Lockout policy. This policy essentially configures after how many incorrect login attempts will that account be locked out of being logged in for and for how long. To do this, I went back through the same path to reach the password policies, and right under it was account lockout policy. Once I was there, I configured the three settings that were available. The first option was account lockout duration, and I chose fifteen minutes. The next option was the lockout threshold, so how many attempts would it take to lock that account, and I chose 5. A third option was for how long should that lockout occur before the amount reset, and I also chose 15 minutes for that as well (IM9). These polices help stop brute-force attacks as if a threat actor was trying to force their way into logging into an account, they could only have so many attempts before they would get locked out, giving more time for incident response to get on top of things. 
+Another Policy I wanted to configure within the "Password Policies" GPO was the Account Lockout policy. This policy essentially configures after how many incorrect login attempts will that account be locked out of being logged in for and for how long. To do this, I went back through the same path to reach the password policies, and right under it was the account lockout policy. Once I was there, I configured the three available settings. The first option was account lockout duration, and I chose fifteen minutes. The next option was the lockout threshold, so how many attempts would it take to lock that account, and I chose 5. A third option was for how long the lockout occurs before the amount resets, and I also chose 15 minutes for that as well (IM9). These policies help stop brute-force attacks, as if a threat actor were trying to force their way into an account; they could only make so many attempts before they would get locked out, giving more time for incident response to get on top of things. 
 
 <img width="786" height="282" alt="Screenshot 2026-05-25 102751" src="https://github.com/user-attachments/assets/7ef29274-4189-4345-b45d-aad25c587b43" />
 
-IM9: Account lockout Policy Configuration Within Password Policy GPO
+IM9: Account Lockout Policy Configuration Within Password Policy GPO
+
+### Part 5: Forcing Policy Update. 
+
+To ensure that both these policies were applied, I needed to run the command "gpupdate /force" on the Windows 10 VM so that the policies would be applied to that machine (IM10). I could also do it on the Domain Controller as well, but it wasn't needed. 
+
+<img width="402" height="138" alt="Screenshot 2026-05-25 103248" src="https://github.com/user-attachments/assets/d3188128-e0b6-4568-9999-d049a2213cc7" />
+
+IM10: Forcing Policy Update on Windows 10 Machine
+
+### Part 6: Testing Password and Lockout Policies
+
+I now wanted to test and see if both of these types of policies were working within my domain as intended. 
+
+1. **TESTING PASSWORD POLICIES.** First, I wanted to test the password policies. I went onto the Windows 10 VM and logged in as a standard user account "amir.user." I did Ctrl+Alt+Delete (for VirtualBox, it is left Ctrl+Delete) and chose "Change a Password." I first tried to change the password to something I knew wouldn't work so that I could see if the policies were working. I changed the password to "ABCD1234," and it didn't work, giving me a message that the password didn't meet the Complexity Requirements (IM11). I then tried a more secure and longer password that met the Complexity Requirements, and it worked, confirming that the password policies were working as intended
+2. **TESTING ACCOUNT LOCKOUT POLICY.** To test this policy, I simply tried to log in to the standard user account with the wrong password on purpose five times. After the sixth time of trying to log in, I got a message saying that the account had been locked out, confirming that the lockout policy was working as intended as well (IM12). Since I still needed the account to use for other things and I couldn't wait the fifteen minutes, I went on my DC and manually unlocked the account in Active Directory (normally in a real company setting, only the administrator could do this and would need proof that the real user was having issues logging in and not a threat actor) (IM13).
+
+<img width="556" height="239" alt="Screenshot 2026-05-25 103647" src="https://github.com/user-attachments/assets/88e8dfce-45b9-440a-8065-cf10345f45ac" />
+
+IM11: Confirming Non-Complex Password Would be Blocked by Password Policy
+
+<img width="475" height="475" alt="Screenshot 2026-05-25 105718" src="https://github.com/user-attachments/assets/a184e1d5-65b3-4d6d-8122-18c14b3e1b9a" />
+
+IM12: Account Locked Out Due to Multiple Incorrect Login Attempts
+
+<img width="475" height="500" alt="image" src="https://github.com/user-attachments/assets/99c4371f-45ff-4542-9900-54778e9732ea" />
+
+IM13: Optional Manual Unlock of User Account
 
 
 
