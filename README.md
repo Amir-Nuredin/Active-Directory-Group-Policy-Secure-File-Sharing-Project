@@ -182,7 +182,7 @@ The Last Part of this project was simulating giving different permissions to a c
 
 1. **CREATING COMPANY FOLDER.** For this step, I simply went to my Windows Server, went to the C: drive, and created a new folder named "CompanyFiles (IM25)." This is the main folder that I would use to grant different permissions.
 2. **SHARING THE FOLDER TO THE DOMAIN.** Now to share this folder, I right-clicked it, then navigated to Properties, then the Sharing tab, then Advanced sharing, then clicked the checkbox that said: "Share this folder (IM26)."
-3. **CONFIGURING SHARE PERMISSIONS.** These permissions are only for who can access the shared folder over the network. In the same tab, I selected permissions, and then added the two groups I wanted to configure permissions for, Employees and ITAdmins. For Employees, they only get Read access (IM27), and IT admins get full control over the folder (IM28). I then applied and saved the changes.
+3. **CONFIGURING SHARE PERMISSIONS.** These permissions are only for those who can access the shared folder over the network. In the same tab, I selected permissions, and then added the two groups I wanted to configure permissions for, Employees and ITAdmins. For Employees, they only get Read access (IM27), and IT admins get full control over the folder (IM28). I then applied and saved the changes.
 
 <img width="571" height="211" alt="image" src="https://github.com/user-attachments/assets/8ef0a0b6-e85d-473d-b976-202228b31acf" />
 
@@ -199,7 +199,7 @@ IM27&28: Configuring Share Permissions for Employees and ITAdmins Groups.
 
 ### Part 11: Configuring NTFS Permissions
 
-This step is an add-on to the last one, as these are the real permissions for the file when it comes to who can edit, modify, or delete files in the folder. This is an important concept known as least privilege. It is the idea that users and administrators should only have access to what they need, and nothing more. This is important because it can help seperate permissions for different users. For example, if there is a high level document that only executives can read, admins can read and modify, and normal users can't see at all, we can configure the permissions to apply to that scnerio. To do this, I right-clicked the file again, select properties, and then security. I added the two groups again, Employees and ITAdmins, and configured their permissions (IM29). For the Employees group, they got Read permissions (as well as read and execute and list folder contents, which go under Read) (IM30), and the ITAdmins group got full control over the file (IM31).  
+This step is an add-on to the last one, as these are the real permissions for the file when it comes to who can edit, modify, or delete files in the folder. This is an important concept known as least privilege. It is the idea that users and administrators should only have access to what they need, and nothing more. This is important because it can help separate permissions for different users. For example, if there is a high-level document that only executives can read, admins can read and modify, and normal users can't see it at all, we can configure the permissions to apply to that scenario. To do this, I right-clicked the file again, selected properties, and then security. I added the two groups again, Employees and ITAdmins, and configured their permissions (IM29). For the Employees group, they got Read permissions (as well as read and execute and list folder contents, which go under Read) (IM30), and the ITAdmins group got full control over the file (IM31).  
 
 <img width="755" height="465" alt="Screenshot 2026-05-25 115750" src="https://github.com/user-attachments/assets/4d50f7fe-396d-44e6-a29b-5b85ad16dae7" />
 
@@ -209,6 +209,55 @@ IM29: Adding Both Groups under the Security tab
 <img width="359" height="301" alt="Screenshot 2026-05-25 115907" src="https://github.com/user-attachments/assets/1643f144-b43e-4ba0-81d9-83d0ff179f4f" />
 
 IM30&31: Configuring Access Permissions for Both Groups
+
+### Part 12: Accessing Shared Folder From Windows 10 VM
+
+The last part of this project was to attempt to access the shared folder from my Windows 10 VM from different accounts to see if the different accounts had different permissions when it comes to modifying the folder
+
+1. **ACCESSING SHARED FOLDER & TESTING PERMISSIONS.** To access the shared folder, I first needed to find the name of the Windows Server, as I would have to type that along with the name of the folder to access it. I ran the command "hostname," and I found the name of the Windows Server machine, "WIN-CF3RVT2KFC0 (IM32)." I then went to the Windows 10 VM and clicked Windows + R to use the Run feature. I then typed in "\\WIN-CF3RVT2KFC0\CompanyFiles." The first part is the name of the Windows Server Machine, and the second part is the specific filename. I first did this on the standard user account within my domain. When I ran it, the folder opened as it should.  I first tried to create a new file, but it said I didn't have permission to do so (IM33). I then went to the admin account and created a file, and it worked (IM34). I wrote some example text in the file so I could test saving and deleting the file (IM35). I then tried deleting the file on the user account, and that didn't work (IM36). I also tried saving the file, and that didn't work for the user account as well, confirming that the restrictive permissions for standard user accounts were working as intended (IM37). I then went back into the admin account and tried to edit and delete the file, both of which worked, confirming that the admin account had full control of the file IM38.
+
+<img width="386" height="85" alt="Screenshot 2026-05-25 120247" src="https://github.com/user-attachments/assets/cb405924-c6d0-48bb-b1b7-fe92445bc5c3" />
+
+IM32: Finding Hostname for Windows Server
+
+<img width="650" height="450" alt="Screenshot 2026-05-25 132627" src="https://github.com/user-attachments/assets/bf1b6ed4-4bba-4c9d-be8a-e8eacfed56a4" />
+
+IM33: Denied Access to Create a File in Standard User Account
+
+<img width="783" height="194" alt="Screenshot 2026-05-25 132824" src="https://github.com/user-attachments/assets/1d0ab772-480f-46db-9e24-5abc9ef9ace0" />
+
+IM34: Successful Creation of Text File in Admin Account
+
+<img width="733" height="93" alt="Screenshot 2026-05-25 133442" src="https://github.com/user-attachments/assets/5eba5d0c-d377-44dd-82be-4554900d014f" />
+
+IM35: Example Text in Shared File
+
+<img width="600" height="375" alt="Screenshot 2026-05-25 133124" src="https://github.com/user-attachments/assets/819d6259-fb1b-4e7f-b4a5-5c47723c271d" />
+<img width="615" height="400" alt="Screenshot 2026-05-25 133306" src="https://github.com/user-attachments/assets/f6b0fa7d-d4de-4108-abeb-ac38047b0b63" />
+
+IM36&37: Failed Deletion and Saving of Shared File in Standard User Account
+
+<img width="784" height="226" alt="Screenshot 2026-05-25 133510" src="https://github.com/user-attachments/assets/51a4ae80-405e-4124-bb11-4e4203f7af3a" />
+
+IM38: Deleted File in Admin Account
+
+## Conclusion
+
+This lab was successful in demonstrating the implementation and enforcement of security controls within an Active Directory environment using Windows Server 2022, with a focus on Group Policy management and secure file sharing. Through this project, key enterprise administration concepts were applied in a practical setting, including the creation and configuration of Group Policy Objects (GPOs), the enforcement of password and account lockout policies, and the application of user-based restrictions to control system access. Additionally, the use of Organizational Units (OUs) allowed for targeted policy deployment, reinforcing structured management and the principle of least privilege.
+
+Throughout the lab, several challenges were encountered, particularly in ensuring proper Group Policy application and network-based file access. Issues such as GPOs not applying as expected, conflicts with the Default Domain Policy, and initial connectivity problems when accessing shared folders highlighted the importance of correct policy linking, domain-level configuration, and proper DNS/network setup. Troubleshooting these issues reinforced a deeper understanding of how Group Policy is processed and how network configuration impacts domain functionality.
+
+Overall, this project strengthened the connection between theoretical cybersecurity concepts and their real-world application in enterprise environments. It emphasized critical principles such as centralized policy enforcement, access control, least privilege, and the layered use of share and NTFS permissions to secure resources. The lab also demonstrated how administrators can control user behavior and protect systems through structured policy management.
+
+Some potential areas for further improvement in this lab include implementing fine-grained password policies for more granular control, expanding user restrictions through additional GPO settings, introducing auditing and logging to monitor user activity, and scaling the environment with additional clients and servers to simulate a larger enterprise network.
+
+
+
+
+
+
+
+
 
 
 
